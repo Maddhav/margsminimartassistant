@@ -965,7 +965,9 @@
           session_id: sessionId,
           customer_name: customerName,
           language: lang
-        })
+        }),
+          signal: AbortSignal.timeout(60000)
+        
       });
       const data = await res.json();
       removeTyping();
