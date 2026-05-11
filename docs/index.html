@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marg's Minimart — AI Assistant</title>
+  <title>Marg's Minimart — Hudson's Hope, BC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -21,820 +21,540 @@
       --text-dark: #1a0f08;
       --text-mid: #5a4030;
       --text-light: #9a7a60;
-      --border: rgba(90, 53, 32, 0.15);
+      --border: rgba(90,53,32,0.15);
     }
 
     html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--warm-white); color: var(--text-dark); overflow-x: hidden; }
 
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: var(--warm-white);
-      color: var(--text-dark);
-      overflow-x: hidden;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: var(--brown-dark);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .hero-texture {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(192,57,43,0.18) 0%, transparent 60%),
-        url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M0 0h40v40H0zm40 40h40v40H40z'/%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-
-    /* NAV */
-    nav {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.8rem 4rem;
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(44,26,14,0.97); backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4rem; height: 68px;
     }
-
-    .nav-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.4rem;
-      color: #f0d090;
-      letter-spacing: 0.02em;
-    }
-
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #f0d090; cursor: pointer; }
     .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; cursor: pointer; }
+    .nav-links a:hover, .nav-links a.active { color: #f0d090; }
+    .nav-cta { background: var(--red); color: #fff !important; padding: 8px 20px; border-radius: 8px; }
+    .nav-cta:hover { background: var(--red-dark) !important; }
+    .nav-dot { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+    .dot { width: 7px; height: 7px; background: #2ecc71; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
 
-    .nav-badge {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.05em;
-    }
+    /* PAGES */
+    .page { display: none; padding-top: 68px; }
+    .page.active { display: block; }
 
-    .nav-dot {
-      width: 7px; height: 7px;
-      background: #2ecc71;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(0.85); }
-    }
-
-    /* HERO CONTENT */
-    .hero-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem 5rem;
-      position: relative;
-      z-index: 5;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(212,168,67,0.12);
-      border: 1px solid rgba(212,168,67,0.3);
-      border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      animation: fadeUp 0.8s ease both;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      line-height: 1.05;
-      color: #f7f0e0;
-      margin-bottom: 0.3rem;
-      animation: fadeUp 0.8s 0.1s ease both;
-    }
-
-    .hero-title em {
-      font-style: italic;
-      color: var(--red);
-    }
-
-    .hero-title-sub {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.8rem, 4vw, 3.2rem);
-      color: rgba(247,240,224,0.5);
-      font-weight: 400;
-      margin-bottom: 2rem;
-      animation: fadeUp 0.8s 0.2s ease both;
-    }
-
-    .hero-desc {
-      max-width: 520px;
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.5);
-      line-height: 1.75;
-      margin-bottom: 3rem;
-      font-weight: 300;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-
+    /* BUTTONS */
     .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--red);
-      color: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      padding: 14px 32px;
-      border-radius: 10px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--red); color: #fff; font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; font-weight: 600; padding: 14px 32px;
+      border-radius: 10px; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s;
     }
-
-    .btn-primary:hover {
-      background: var(--red-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(192,57,43,0.35);
-    }
-
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(192,57,43,0.35); }
     .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: transparent;
-      color: rgba(255,255,255,0.7);
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 400;
-      padding: 14px 28px;
-      border-radius: 10px;
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.15);
-      cursor: pointer;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: rgba(255,255,255,0.7); font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; padding: 14px 28px; border-radius: 10px;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: all 0.2s;
     }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
 
-    .btn-secondary:hover {
-      border-color: rgba(255,255,255,0.35);
-      color: #fff;
-    }
+    /* SECTION */
+    .section { padding: 6rem 4rem; }
+    .section.cream { background: var(--cream); }
+    .section-label { text-align: center; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; font-weight: 600; }
+    .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); color: var(--brown-dark); margin-bottom: 1rem; line-height: 1.2; }
+    .section-sub { text-align: center; color: var(--text-light); font-size: 1rem; max-width: 500px; margin: 0 auto 4rem; line-height: 1.7; font-weight: 300; }
 
-    /* SCROLL INDICATOR */
-    .scroll-hint {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      color: rgba(255,255,255,0.25);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      animation: fadeUp 1s 0.8s ease both;
-    }
+    /* HOME HERO */
+    .hero { min-height: 100vh; background: var(--brown-dark); position: relative; display: flex; flex-direction: column; overflow: hidden; }
+    .hero-texture { position: absolute; inset: 0; background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(192,57,43,0.18) 0%, transparent 60%); pointer-events: none; }
+    .hero-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 5rem 2rem 6rem; position: relative; z-index: 5; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(212,168,67,0.12); border: 1px solid rgba(212,168,67,0.3); border-radius: 20px; padding: 6px 16px; font-size: 0.78rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; animation: fadeUp 0.8s ease both; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem,8vw,6.5rem); line-height: 1.05; color: #f7f0e0; margin-bottom: 0.3rem; animation: fadeUp 0.8s 0.1s ease both; }
+    .hero-title em { font-style: italic; color: var(--red); }
+    .hero-title-sub { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem,3vw,2.5rem); color: rgba(247,240,224,0.45); font-weight: 400; margin-bottom: 2rem; animation: fadeUp 0.8s 0.2s ease both; }
+    .hero-desc { max-width: 520px; font-size: 1.05rem; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 3rem; font-weight: 300; animation: fadeUp 0.8s 0.3s ease both; }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
+    .hero-info { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem; animation: fadeUp 0.8s 0.5s ease both; }
+    .hero-info-item { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.45); font-size: 0.85rem; }
+    .hero-info-item strong { color: rgba(255,255,255,0.7); }
 
-    .scroll-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
-      animation: scrollLine 1.5s ease-in-out infinite;
-    }
+    /* SERVICES STRIP */
+    .services-strip { background: var(--red); padding: 1rem 4rem; display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+    .strip-item { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 500; }
 
-    @keyframes scrollLine {
-      0%, 100% { transform: scaleY(1); opacity: 0.5; }
-      50% { transform: scaleY(0.5); opacity: 1; }
-    }
-
-    /* ── FEATURES ── */
-    .features {
-      background: var(--cream);
-      padding: 6rem 4rem;
-    }
-
-    .section-label {
-      text-align: center;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    .section-title {
-      text-align: center;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      color: var(--brown-dark);
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-sub {
-      text-align: center;
-      color: var(--text-light);
-      font-size: 1rem;
-      max-width: 500px;
-      margin: 0 auto 4rem;
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .feature-card {
-      background: var(--warm-white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--red), var(--gold));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(44,26,14,0.1);
-      border-color: rgba(192,57,43,0.2);
-    }
-
+    /* FEATURES GRID */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .feature-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,var(--red),var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(44,26,14,0.1); }
     .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon { width: 48px; height: 48px; background: rgba(192,57,43,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.2rem; }
+    .feature-title { font-size: 1.05rem; font-weight: 600; color: var(--brown-dark); margin-bottom: 0.5rem; }
+    .feature-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.65; font-weight: 300; }
 
-    .feature-icon {
-      width: 48px; height: 48px;
-      background: rgba(192,57,43,0.08);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
-    }
+    /* HOURS BANNER */
+    .hours-banner { background: var(--brown-dark); padding: 3rem 4rem; display: flex; align-items: center; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+    .hours-item { text-align: center; }
+    .hours-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.4rem; }
+    .hours-value { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #f0d090; }
+    .hours-divider { width: 1px; height: 50px; background: rgba(255,255,255,0.1); }
 
-    .feature-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--brown-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .feature-desc {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.65;
-      font-weight: 300;
-    }
-
-    /* ── CHAT SECTION ── */
-    .chat-section {
-      background: var(--warm-white);
-      padding: 6rem 4rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .chat-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .chat-window {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(44,26,14,0.1);
-      overflow: hidden;
-    }
-
-    /* Chat header */
-    .chat-header {
-      background: var(--brown-dark);
-      padding: 1.2rem 1.8rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .chat-avatar {
-      width: 42px; height: 42px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
+    /* CHAT */
+    .chat-section { background: var(--warm-white); padding: 6rem 4rem; border-top: 1px solid var(--border); }
+    .chat-wrapper { max-width: 800px; margin: 0 auto; }
+    .chat-window { background: #fff; border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 20px 60px rgba(44,26,14,0.1); overflow: hidden; }
+    .chat-header { background: var(--brown-dark); padding: 1.2rem 1.8rem; display: flex; align-items: center; gap: 1rem; }
+    .chat-avatar { width: 42px; height: 42px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
     .chat-header-info { flex: 1; }
-
-    .chat-header-name {
-      font-weight: 600;
-      color: #f7f0e0;
-      font-size: 0.95rem;
-    }
-
-    .chat-header-status {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.45);
-      margin-top: 2px;
-    }
-
-    .status-dot {
-      width: 6px; height: 6px;
-      background: #2ecc71;
-      border-radius: 50%;
-    }
-
-    /* Language selector in chat */
-    .chat-lang {
-      padding: 0.8rem 1.8rem;
-      border-bottom: 1px solid var(--border);
-      background: #fafaf8;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .chat-lang label {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .chat-lang select {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 5px 10px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.82rem;
-      color: var(--text-dark);
-      cursor: pointer;
-      outline: none;
-    }
-
-    /* Messages */
-    .chat-messages {
-      padding: 1.5rem;
-      min-height: 380px;
-      max-height: 420px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      background: #fdfaf6;
-    }
-
+    .chat-header-name { font-weight: 600; color: #f7f0e0; font-size: 0.95rem; }
+    .chat-header-status { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
+    .status-dot { width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; }
+    .chat-lang { padding: 0.8rem 1.8rem; border-bottom: 1px solid var(--border); background: #fafaf8; display: flex; align-items: center; gap: 10px; }
+    .chat-lang label { font-size: 0.78rem; color: var(--text-light); font-weight: 500; }
+    .chat-lang select { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: var(--text-dark); cursor: pointer; outline: none; }
+    .chat-messages { padding: 1.5rem; min-height: 340px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; background: #fdfaf6; }
     .chat-messages::-webkit-scrollbar { width: 4px; }
     .chat-messages::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
-
-    .msg {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      animation: msgIn 0.3s ease;
-    }
-
-    @keyframes msgIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    .msg { display: flex; gap: 10px; align-items: flex-end; animation: msgIn 0.3s ease; }
+    @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .msg.user { flex-direction: row-reverse; }
-
-    .msg-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-
+    .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
     .msg.assistant .msg-avatar { background: rgba(192,57,43,0.1); }
     .msg.user .msg-avatar { background: rgba(44,26,14,0.08); }
-
-    .msg-bubble {
-      max-width: 75%;
-      padding: 11px 16px;
-      border-radius: 18px;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    .msg.assistant .msg-bubble {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-      color: var(--text-dark);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    .msg.user .msg-bubble {
-      background: var(--red);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    /* Quick actions */
-    .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 0 1.5rem 1rem;
-      background: #fdfaf6;
-    }
-
-    .quick-btn {
-      background: #fff;
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      padding: 7px 14px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.8rem;
-      color: var(--brown-mid);
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .quick-btn:hover {
-      background: var(--red);
-      color: #fff;
-      border-color: var(--red);
-      transform: translateY(-1px);
-    }
-
-    /* Name input area */
-    .chat-name-prompt {
-      padding: 1rem 1.5rem;
-      background: #fdfaf6;
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .chat-name-prompt p {
-      font-size: 0.82rem;
-      color: var(--text-light);
-      margin-bottom: 0.8rem;
-    }
-
-    /* Input area */
-    .chat-input-area {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 10px;
-      background: #fff;
-    }
-
-    .chat-input {
-      flex: 1;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.9rem;
-      color: var(--text-dark);
-      outline: none;
-      transition: border-color 0.2s;
-      background: #fafaf8;
-    }
-
+    .msg-bubble { max-width: 75%; padding: 11px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.6; }
+    .msg.assistant .msg-bubble { background: #fff; border: 1px solid var(--border); border-bottom-left-radius: 4px; color: var(--text-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .msg.user .msg-bubble { background: var(--red); color: #fff; border-bottom-right-radius: 4px; }
+    .quick-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 1.5rem 1rem; background: #fdfaf6; }
+    .quick-btn { background: #fff; border: 1.5px solid var(--border); border-radius: 20px; padding: 7px 14px; font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--brown-mid); cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+    .quick-btn:hover { background: var(--red); color: #fff; border-color: var(--red); transform: translateY(-1px); }
+    .chat-input-area { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 10px; background: #fff; }
+    .chat-input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 16px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; background: #fafaf8; }
     .chat-input:focus { border-color: var(--red); }
     .chat-input::placeholder { color: #bbb; }
-
-    .chat-send {
-      width: 42px; height: 42px;
-      background: var(--red);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-
-    .chat-send:hover {
-      background: var(--red-dark);
-      transform: scale(1.05);
-    }
-
-    /* Typing indicator */
-    .typing {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      padding: 10px 14px;
-    }
-
-    .typing span {
-      width: 7px; height: 7px;
-      background: #ccc;
-      border-radius: 50%;
-      animation: typing 1.2s infinite;
-    }
-
+    .chat-send { width: 42px; height: 42px; background: var(--red); border: none; border-radius: 10px; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .chat-send:hover { background: var(--red-dark); transform: scale(1.05); }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+    .typing span { width: 7px; height: 7px; background: #ccc; border-radius: 50%; animation: typing 1.2s infinite; }
     .typing span:nth-child(2) { animation-delay: 0.2s; }
     .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+    .staff-link { text-align: center; margin-top: 1.5rem; }
+    .staff-link a { display: inline-flex; align-items: center; gap: 7px; background: #f5f0eb; border: 1.5px solid #d5c5b5; color: #8a6a50; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
+    .staff-link a:hover { background: #ede5da; }
 
-    @keyframes typing {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-      30% { transform: translateY(-5px); opacity: 1; }
-    }
+    /* PAGE HEROES */
+    .page-hero { background: var(--brown-dark); padding: 6rem 4rem 5rem; text-align: center; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(192,57,43,0.15), transparent); }
+    .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,4rem); color: #f7f0e0; position: relative; margin-bottom: 1rem; }
+    .page-hero p { color: rgba(255,255,255,0.5); font-size: 1.05rem; max-width: 500px; margin: 0 auto; line-height: 1.7; font-weight: 300; position: relative; }
 
-    /* Staff access */
-    .staff-link {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
+    /* ABOUT */
+    .about-content { max-width: 900px; margin: 0 auto; padding: 5rem 4rem; }
+    .about-block { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 5rem; }
+    .about-block.reverse { direction: rtl; }
+    .about-block.reverse > * { direction: ltr; }
+    .about-text h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--brown-dark); margin-bottom: 1rem; line-height: 1.2; }
+    .about-text p { color: var(--text-mid); line-height: 1.8; font-size: 0.95rem; font-weight: 300; margin-bottom: 1rem; }
+    .about-visual { background: var(--cream); border-radius: 20px; padding: 3rem 2rem; text-align: center; border: 1px solid var(--border); }
+    .about-visual .big-emoji { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .about-visual h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--brown-dark); margin-bottom: 0.5rem; }
+    .about-visual p { color: var(--text-light); font-size: 0.88rem; line-height: 1.6; }
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 2rem; }
+    .value-card { background: var(--cream); border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid var(--border); }
+    .value-card .emoji { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+    .value-card h4 { font-weight: 600; color: var(--brown-dark); margin-bottom: 0.4rem; font-size: 0.95rem; }
+    .value-card p { color: var(--text-light); font-size: 0.82rem; line-height: 1.5; }
 
-    .staff-link a {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: #f5f0eb;
-      border: 1.5px solid #d5c5b5;
-      color: #8a6a50;
-      font-size: 0.82rem;
-      font-weight: 500;
-      padding: 9px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.2s;
-      letter-spacing: 0.03em;
-    }
+    /* SERVICES */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+    .service-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: all 0.3s; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(44,26,14,0.1); }
+    .service-card-header { background: var(--brown-dark); padding: 2rem; display: flex; align-items: center; gap: 1rem; }
+    .service-card-icon { width: 52px; height: 52px; background: rgba(255,255,255,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+    .service-card-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #f7f0e0; }
+    .service-card-body { padding: 1.8rem; }
+    .service-card-body p { color: var(--text-mid); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.2rem; font-weight: 300; }
+    .service-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .service-list li { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--text-mid); }
+    .service-list li::before { content: '✓'; width: 20px; height: 20px; background: rgba(192,57,43,0.1); color: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
 
-    .staff-link a:hover {
-      background: #ede5da;
-      border-color: #c0a080;
-    }
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto; padding: 5rem 4rem; }
+    .contact-info h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--brown-dark); margin-bottom: 2rem; }
+    .contact-item { display: flex; gap: 1rem; margin-bottom: 1.8rem; align-items: flex-start; }
+    .contact-item-icon { width: 44px; height: 44px; background: rgba(192,57,43,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .contact-item-text h4 { font-weight: 600; color: var(--brown-dark); margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .contact-item-text p, .contact-item-text a { color: var(--text-mid); font-size: 0.88rem; line-height: 1.6; text-decoration: none; font-weight: 300; }
+    .contact-item-text a:hover { color: var(--red); }
+    .hours-table { background: var(--cream); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); margin-top: 1rem; }
+    .hours-table h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--brown-dark); margin-bottom: 1.2rem; }
+    .hours-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--text-mid); }
+    .hours-row .time { color: var(--brown-dark); font-weight: 500; }
+    .map-placeholder { background: var(--cream); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; min-height: 400px; }
+    .map-placeholder iframe { width: 100%; flex: 1; border: none; min-height: 320px; }
+    .map-cta { padding: 1.2rem; text-align: center; }
+    .map-cta a { display: inline-flex; align-items: center; gap: 8px; background: var(--red); color: #fff; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: background 0.2s; }
+    .map-cta a:hover { background: var(--red-dark); }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--brown-dark);
-      padding: 2.5rem 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .footer-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.1rem;
-      color: #f0d090;
-    }
-
+    /* FOOTER */
+    footer { background: var(--brown-dark); padding: 3rem 4rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #f0d090; margin-bottom: 0.5rem; }
     .footer-logo span { color: var(--red); }
+    .footer-tagline { color: rgba(255,255,255,0.3); font-size: 0.82rem; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.85rem; cursor: pointer; transition: color 0.2s; }
+    .footer-links a:hover { color: #f0d090; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { color: rgba(255,255,255,0.2); font-size: 0.78rem; }
+    .footer-phone a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem; }
+    .footer-phone a:hover { color: #f0d090; }
 
-    .footer-text {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.3);
-    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .hero-content { padding: 3rem 1.5rem 4rem; }
-      .features { padding: 4rem 1.5rem; }
-      .chat-section { padding: 4rem 1.5rem; }
-      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
-      .msg-bubble { max-width: 88%; }
+      .navbar { padding: 0 1.5rem; }
+      .nav-dot { display: none; }
+      .nav-links { gap: 1rem; }
+      .nav-links li:nth-child(2), .nav-links li:nth-child(3) { display: none; }
+      .section { padding: 4rem 1.5rem; }
+      .hero-content { padding: 4rem 1.5rem 5rem; }
+      .services-strip { gap: 1.5rem; padding: 1rem 1.5rem; }
+      .hours-banner { gap: 2rem; padding: 2rem 1.5rem; }
+      .hours-divider { display: none; }
+      .about-content { padding: 3rem 1.5rem; }
+      .about-block, .about-block.reverse { grid-template-columns: 1fr; gap: 2rem; direction: ltr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+      .footer-top { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── HERO ── -->
-<section class="hero">
-  <div class="hero-texture"></div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="showPage('home')">⛽ Marg's <span>Minimart</span></div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">About</a></li>
+    <li><a onclick="showPage('services')" id="nav-services">Services</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    <li><a onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)" class="nav-cta">💬 Chat with Gary</a></li>
+  </ul>
+  <div class="nav-dot"><span class="dot"></span> Gary is online</div>
+</nav>
 
-  <nav>
-    <div class="nav-logo">⛽ Marg's <span>Minimart</span></div>
-    <div class="nav-badge">
-      <span class="nav-dot"></span>
-      Gary is online
+<!-- ══ HOME ══ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-texture"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">⛽ Hudson's Hope, BC · Your Local Convenience Store</div>
+      <h1 class="hero-title">Your <em>local</em><br>convenience store</h1>
+      <div class="hero-title-sub">Fuel · Food · Community</div>
+      <p class="hero-desc">Everything you need under one roof. From fresh fuel to hot deli food, lottery tickets to ATM — we've got Hudson's Hope covered, 7 days a week.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)">💬 Ask Gary anything</button>
+        <button class="btn-secondary" onclick="showPage('services')">Our services →</button>
+      </div>
+      <div class="hero-info">
+        <div class="hero-info-item">📍 <span><strong>9718 Beattie Dr</strong>, Hudson's Hope, BC</span></div>
+        <div class="hero-info-item">🕐 Open <strong>5:00 AM – 10:00 PM</strong> daily</div>
+        <div class="hero-info-item">📞 <strong>250-783-5257</strong></div>
+      </div>
     </div>
-  </nav>
+  </section>
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">⛽ AI-Powered Customer Assistant</div>
-    <h1 class="hero-title">Meet <em>Gary</em></h1>
-    <div class="hero-title-sub">Your 24/7 virtual assistant</div>
-    <p class="hero-desc">
-      Got a question about fuel prices, store hours, or our deli?
-      Gary answers instantly — day or night, in your language.
-    </p>
-    <div class="hero-cta">
-      <a href="#chat" class="btn-primary">💬 Chat with Gary</a>
-      <a href="#features" class="btn-secondary">See what Gary can do ↓</a>
-    </div>
+  <div class="services-strip">
+    <div class="strip-item">⛽ Gas · Diesel · Propane</div>
+    <div class="strip-item">🥪 Deli & Hot Food</div>
+    <div class="strip-item">☕ Fresh Coffee</div>
+    <div class="strip-item">🎰 Lottery & Keno</div>
+    <div class="strip-item">🏧 ATM Inside</div>
+    <div class="strip-item">🎆 Fireworks</div>
   </div>
 
-  <div class="scroll-hint">
-    <div class="scroll-line"></div>
-    scroll
+  <section class="section cream">
+    <div class="section-label">What we offer</div>
+    <h2 class="section-title">Everything you need to know<br>about Marg's Minimart</h2>
+    <p class="section-sub">Ask Gary anything — no waiting on hold, no searching around.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⛽</div>
+        <div class="feature-title">Fuel & Pricing</div>
+        <div class="feature-desc">Regular, premium, diesel, and propane available. Competitive prices for Hudson's Hope and surrounding areas.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🕐</div>
+        <div class="feature-title">Store Hours</div>
+        <div class="feature-desc">Open 7 days a week from 5:00 AM to 10:00 PM — including weekends and most holidays.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥪</div>
+        <div class="feature-title">Deli & Hot Food</div>
+        <div class="feature-desc">Sandwiches, pastries, donuts, samosas, chicken tenders and more. Hot food available until 10 PM.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎰</div>
+        <div class="feature-title">Lottery & Keno</div>
+        <div class="feature-desc">Lotto Max, Lotto 649, Keno, and scratch-and-win tickets available in store every day.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <div class="feature-title">Gary speaks 5 Languages</div>
+        <div class="feature-desc">Our AI assistant Gary answers in English, French, Punjabi, Spanish, and Hindi — for everyone in our community.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏧</div>
+        <div class="feature-title">ATM & More</div>
+        <div class="feature-desc">ATM on site, fireworks in season, ice cream, snacks and all your everyday convenience needs.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="hours-banner">
+    <div class="hours-item"><div class="hours-label">We're open</div><div class="hours-value">Every Day</div></div>
+    <div class="hours-divider"></div>
+    <div class="hours-item"><div class="hours-label">Opening time</div><div class="hours-value">5:00 AM</div></div>
+    <div class="hours-divider"></div>
+    <div class="hours-item"><div class="hours-label">Closing time</div><div class="hours-value">10:00 PM</div></div>
+    <div class="hours-divider"></div>
+    <div class="hours-item"><div class="hours-label">Call us</div><div class="hours-value" style="font-size:1.3rem">250-783-5257</div></div>
   </div>
-</section>
 
-<!-- ── FEATURES ── -->
-<section class="features" id="features">
-  <div class="section-label">What Gary can do</div>
-  <h2 class="section-title">Everything you need to know<br>about Marg's Minimart</h2>
-  <p class="section-sub">Ask Gary anything — no waiting on hold, no searching the website.</p>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">⛽</div>
-      <div class="feature-title">Fuel & Pricing</div>
-      <div class="feature-desc">Get instant answers about regular, premium, and diesel fuel prices and availability.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🕐</div>
-      <div class="feature-title">Store Hours</div>
-      <div class="feature-desc">Find out when we're open — including holidays and special hours — without calling.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🥪</div>
-      <div class="feature-title">Deli & Food</div>
-      <div class="feature-desc">Ask about our hot food menu, sandwiches, pastries, and daily specials.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎰</div>
-      <div class="feature-title">Lottery & Services</div>
-      <div class="feature-desc">Learn about lottery tickets, ATM, and all the services we offer in store.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌐</div>
-      <div class="feature-title">5 Languages</div>
-      <div class="feature-desc">Gary speaks English, French, Punjabi, Spanish, and Hindi. Ask in your language.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎁</div>
-      <div class="feature-title">Deals & Promotions</div>
-      <div class="feature-desc">Leave your contact and be the first to hear about our weekly deals and offers.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CHAT ── -->
-<section class="chat-section" id="chat">
-  <div class="section-label">Try it now</div>
-  <h2 class="section-title">Chat with Gary</h2>
-  <p class="section-sub">Ask anything about our store. Gary responds instantly.</p>
-
-  <div class="chat-wrapper">
-    <div class="chat-window">
-
-      <!-- Header -->
-      <div class="chat-header">
-        <div class="chat-avatar">⛽</div>
-        <div class="chat-header-info">
-          <div class="chat-header-name">Gary — Marg's Minimart Assistant</div>
-          <div class="chat-header-status">
-            <span class="status-dot"></span>
-            Online now · Replies instantly
+  <section class="chat-section" id="chat">
+    <div class="section-label">AI Assistant</div>
+    <h2 class="section-title">Chat with Gary</h2>
+    <p class="section-sub">Ask anything about our store. Gary responds instantly, 24/7.</p>
+    <div class="chat-wrapper">
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-avatar">⛽</div>
+          <div class="chat-header-info">
+            <div class="chat-header-name">Gary — Marg's Minimart Assistant</div>
+            <div class="chat-header-status"><span class="status-dot"></span>Online now · Replies instantly</div>
           </div>
         </div>
-      </div>
-
-      <!-- Language -->
-      <div class="chat-lang">
-        <label>🌐 Language:</label>
-        <select id="langSelect">
-          <option value="English">English</option>
-          <option value="Français">Français</option>
-          <option value="ਪੰਜਾਬੀ">ਪੰਜਾਬੀ</option>
-          <option value="Español">Español</option>
-          <option value="हिन्दी">हिन्दी</option>
-        </select>
-      </div>
-
-      <!-- Messages -->
-      <div class="chat-messages" id="chatMessages">
-        <div class="msg assistant">
-          <div class="msg-avatar">⛽</div>
-          <div class="msg-bubble" id="welcomeMsg">
-            Hey there! 👋 I'm <strong>Gary</strong>, your virtual assistant at Marg's Minimart. Before we get started, what's your name?
+        <div class="chat-lang">
+          <label>🌐 Language:</label>
+          <select id="langSelect">
+            <option>English</option><option>Français</option><option>ਪੰਜਾਬੀ</option><option>Español</option><option>हिन्दी</option>
+          </select>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg assistant">
+            <div class="msg-avatar">⛽</div>
+            <div class="msg-bubble">Hey there! 👋 I'm <strong>Gary</strong>, your virtual assistant at Marg's Minimart. Before we get started, what's your name?</div>
           </div>
         </div>
+        <div class="quick-actions" id="quickActions" style="display:none">
+          <button class="quick-btn" onclick="sendQuick('What are your store hours?')">🕐 Store Hours</button>
+          <button class="quick-btn" onclick="sendQuick('What fuel types do you have?')">⛽ Fuel Types</button>
+          <button class="quick-btn" onclick="sendQuick('What food do you have in the deli?')">🥪 Deli Menu</button>
+          <button class="quick-btn" onclick="sendQuick('Do you sell lottery tickets?')">🎰 Lottery</button>
+          <button class="quick-btn" onclick="sendQuick('Do you have an ATM?')">🏧 ATM</button>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Type your name to get started..." onkeypress="handleKey(event)"/>
+          <button class="chat-send" onclick="sendMessage()">➤</button>
+        </div>
       </div>
-
-      <!-- Quick actions (hidden until name entered) -->
-      <div class="quick-actions" id="quickActions" style="display:none;">
-        <button class="quick-btn" onclick="sendQuick('What are your store hours?')">🕐 Store Hours</button>
-        <button class="quick-btn" onclick="sendQuick('What fuel types do you have?')">⛽ Fuel Types</button>
-        <button class="quick-btn" onclick="sendQuick('What food do you have in the deli?')">🥪 Deli Menu</button>
-        <button class="quick-btn" onclick="sendQuick('Do you sell lottery tickets?')">🎰 Lottery</button>
-        <button class="quick-btn" onclick="sendQuick('Do you have an ATM?')">🏧 ATM</button>
+      <div class="staff-link">
+        <a href="https://marg-sminimartchatbot-mmezc9gbwwd3hzjdy7ajv4.streamlit.app/admin_panel" target="_blank">🔐 Staff Only — Admin Access</a>
       </div>
-
-      <!-- Input -->
-      <div class="chat-input-area">
-        <input
-          type="text"
-          class="chat-input"
-          id="chatInput"
-          placeholder="Type your name to get started..."
-          onkeypress="handleKey(event)"
-        />
-        <button class="chat-send" onclick="sendMessage()">➤</button>
-      </div>
-
     </div>
+  </section>
+</div>
 
-    <!-- Staff access -->
-    <div class="staff-link">
-      <a href="https://marg-sminimartchatbot-mmezc9gbwwd3hzjdy7ajv4.streamlit.app/admin_panel" target="_blank">
-        🔐 Staff Only — Admin Access
-      </a>
-    </div>
-
+<!-- ══ ABOUT ══ -->
+<div id="page-about" class="page">
+  <div class="page-hero">
+    <h1>About Marg's Minimart</h1>
+    <p>Hudson's Hope's go-to convenience stop — serving the community every single day.</p>
   </div>
-</section>
+  <div class="about-content">
+    <div class="about-block">
+      <div class="about-text">
+        <h2>More than just a gas station</h2>
+        <p>Marg's Minimart has long been the heart of convenience in Hudson's Hope, BC. Whether you're fueling up for a long drive, grabbing a hot sandwich on your lunch break, or picking up a lottery ticket on your way home — we're here for all of it.</p>
+        <p>We believe a great convenience store is more than shelves and pumps. It's a place where the community comes together, where locals are greeted warmly and visitors feel welcome the moment they step in.</p>
+      </div>
+      <div class="about-visual">
+        <span class="big-emoji">⛽</span>
+        <h3>Hudson's Hope, BC</h3>
+        <p>9718 Beattie Dr<br>Hudson's Hope, BC V0C 1V0<br><br>Open 7 days a week<br>5:00 AM – 10:00 PM</p>
+      </div>
+    </div>
+    <div class="about-block reverse">
+      <div class="about-text">
+        <h2>Powered by AI — meet Gary</h2>
+        <p>We've brought our store into 2026 with Gary — an AI assistant that answers your questions 24 hours a day, 7 days a week. No hold music. No searching. Just ask Gary.</p>
+        <p>Gary knows everything about our store — from fuel prices and deli hours to lottery options and ATM availability. He speaks 5 languages so everyone in our community feels at home.</p>
+        <button class="btn-primary" onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)" style="margin-top:1rem">💬 Chat with Gary</button>
+      </div>
+      <div class="about-visual">
+        <span class="big-emoji">🤖</span>
+        <h3>Gary — AI Assistant</h3>
+        <p>Available 24/7<br>Answers in 5 languages<br>English · Français · ਪੰਜਾਬੀ · Español · हिन्दी</p>
+      </div>
+    </div>
+    <div class="section-label" style="text-align:left;margin-bottom:1rem">Our values</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--brown-dark);margin-bottom:1.5rem">What we stand for</h2>
+    <div class="values-grid">
+      <div class="value-card"><span class="emoji">🤝</span><h4>Community First</h4><p>We're part of Hudson's Hope. We care about the people who walk through our doors every day.</p></div>
+      <div class="value-card"><span class="emoji">⚡</span><h4>Always Convenient</h4><p>Open early, close late. Everything you need in one place so you can get on with your day.</p></div>
+      <div class="value-card"><span class="emoji">💛</span><h4>Warm & Welcoming</h4><p>Whether you're a regular or visiting for the first time, you'll always feel at home here.</p></div>
+    </div>
+  </div>
+</div>
 
-<!-- ── FOOTER ── -->
+<!-- ══ SERVICES ══ -->
+<div id="page-services" class="page">
+  <div class="page-hero">
+    <h1>Our Services</h1>
+    <p>Everything under one roof — fuel, food, fun, and more for Hudson's Hope.</p>
+  </div>
+  <section class="section cream">
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">⛽</div><div class="service-card-title">Fuel Station</div></div>
+        <div class="service-card-body">
+          <p>High-quality fuel for every vehicle. Competitive prices for Hudson's Hope and surrounding areas.</p>
+          <ul class="service-list"><li>Regular unleaded gasoline</li><li>Premium gasoline</li><li>Diesel fuel</li><li>Propane available</li></ul>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">🥪</div><div class="service-card-title">Deli & Hot Food</div></div>
+        <div class="service-card-body">
+          <p>Fresh food made daily. Something for everyone whether you're grabbing a quick snack or a full meal.</p>
+          <ul class="service-list"><li>Sandwiches & fresh breads</li><li>Pastries, donuts & muffins</li><li>Samosas, chicken tenders & wedgies</li><li>Freshly brewed coffee & cappuccino</li><li>Ice cream & sweet treats</li></ul>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">🎰</div><div class="service-card-title">Lottery & Gaming</div></div>
+        <div class="service-card-body">
+          <p>Feeling lucky? We carry a full selection of lottery products for your chance to win big.</p>
+          <ul class="service-list"><li>Lotto Max tickets</li><li>Lotto 649 tickets</li><li>Keno games</li><li>Scratch-and-win tickets</li></ul>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">🏪</div><div class="service-card-title">Convenience Store</div></div>
+        <div class="service-card-body">
+          <p>A well-stocked store with all your everyday essentials. If you need it, we probably have it.</p>
+          <ul class="service-list"><li>Snacks & beverages</li><li>Everyday household essentials</li><li>ATM on site</li><li>Fireworks (seasonal)</li><li>Ice cream & frozen treats</li></ul>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">🤖</div><div class="service-card-title">Gary — AI Assistant</div></div>
+        <div class="service-card-body">
+          <p>Got a question? Gary answers instantly 24/7. No waiting on hold, no hunting around the website.</p>
+          <ul class="service-list"><li>Store hours & location info</li><li>Fuel types & availability</li><li>Deli menu & food options</li><li>Lottery & services info</li><li>Answers in 5 languages</li></ul>
+          <button class="btn-primary" onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)" style="margin-top:1.2rem;font-size:0.85rem;padding:10px 20px">💬 Chat with Gary</button>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header"><div class="service-card-icon">☕</div><div class="service-card-title">Café Corner</div></div>
+        <div class="service-card-body">
+          <p>Take a break and enjoy a moment. Our café is the perfect spot to recharge before hitting the road.</p>
+          <ul class="service-list"><li>Freshly brewed coffee</li><li>Hot cappuccinos</li><li>Baked goods daily</li><li>Comfortable seating area</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div id="page-contact" class="page">
+  <div class="page-hero">
+    <h1>Get in Touch</h1>
+    <p>We're open every day. Come visit us in Hudson's Hope or ask Gary anything, anytime.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h2>Find us in Hudson's Hope</h2>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div class="contact-item-text"><h4>Address</h4><p>9718 Beattie Dr<br>Hudson's Hope, BC V0C 1V0</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div class="contact-item-text"><h4>Phone</h4><a href="tel:250-783-5257">250-783-5257</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div class="contact-item-text"><h4>Hours</h4><p>Open every day<br>5:00 AM – 10:00 PM</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📘</div>
+        <div class="contact-item-text"><h4>Facebook</h4><a href="https://www.facebook.com/margsminimart" target="_blank">facebook.com/margsminimart</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🤖</div>
+        <div class="contact-item-text"><h4>Chat with Gary</h4><p>Got a quick question? <a href="#" onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)">Ask Gary</a> — available 24/7.</p></div>
+      </div>
+      <div class="hours-table">
+        <h3>Store Hours</h3>
+        <div class="hours-row"><span class="day">Monday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Tuesday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Wednesday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Thursday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Friday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Saturday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span class="day">Sunday</span><span class="time">5:00 AM – 10:00 PM</span></div>
+      </div>
+    </div>
+    <div class="map-placeholder">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2324.123!2d-121.914463!3d56.027945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s9718+Beattie+Dr%2C+Hudson%27s+Hope%2C+BC!5e0!3m2!1sen!2sca!4v1" allowfullscreen="" loading="lazy"></iframe>
+      <div class="map-cta"><a href="https://maps.app.goo.gl/6HgK2Mdiuvczgk488" target="_blank">📍 Get Directions</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">⛽ Marg's <span>Minimart</span></div>
-  <div class="footer-text">Dawson Creek, BC · Powered by AI</div>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">⛽ Marg's <span>Minimart</span></div>
+      <div class="footer-tagline">Hudson's Hope, BC · Open every day 5 AM – 10 PM</div>
+    </div>
+    <ul class="footer-links">
+      <li><a onclick="showPage('home')">Home</a></li>
+      <li><a onclick="showPage('about')">About</a></li>
+      <li><a onclick="showPage('services')">Services</a></li>
+      <li><a onclick="showPage('contact')">Contact</a></li>
+      <li><a onclick="showPage('home');setTimeout(()=>document.getElementById('chat').scrollIntoView({behavior:'smooth'}),100)">Chat with Gary</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Marg's Minimart · Hudson's Hope, BC · All rights reserved</div>
+    <div class="footer-phone"><a href="tel:250-783-5257">📞 250-783-5257</a></div>
+  </div>
 </footer>
 
 <script>
-  // ── STATE ──
-  const BACKEND_URL = 'https://marg-s-minimart-chatbot.onrender.com'; // Replace after Railway/Render deploy
+  const BACKEND_URL = 'https://marg-s-minimart-chatbot.onrender.com';
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const navEl = document.getElementById('nav-' + name);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   let customerName = null;
   let sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
   let awaitingLead = false;
@@ -845,133 +565,74 @@
   const inputEl = document.getElementById('chatInput');
   const quickActionsEl = document.getElementById('quickActions');
 
-  // ── HELPERS ──
-  function scrollToBottom() {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
+  function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
 
   function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = `msg ${role}`;
-    div.innerHTML = `
-      <div class="msg-avatar">${role === 'assistant' ? '⛽' : '🧑'}</div>
-      <div class="msg-bubble">${text}</div>
-    `;
+    div.innerHTML = `<div class="msg-avatar">${role === 'assistant' ? '⛽' : '🧑'}</div><div class="msg-bubble">${text}</div>`;
     messagesEl.appendChild(div);
     scrollToBottom();
   }
 
   function showTyping() {
     const div = document.createElement('div');
-    div.className = 'msg assistant';
-    div.id = 'typing';
-    div.innerHTML = `
-      <div class="msg-avatar">⛽</div>
-      <div class="msg-bubble">
-        <div class="typing"><span></span><span></span><span></span></div>
-      </div>
-    `;
-    messagesEl.appendChild(div);
-    scrollToBottom();
+    div.className = 'msg assistant'; div.id = 'typing';
+    div.innerHTML = `<div class="msg-avatar">⛽</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    messagesEl.appendChild(div); scrollToBottom();
   }
 
-  function removeTyping() {
-    const t = document.getElementById('typing');
-    if (t) t.remove();
-  }
+  function removeTyping() { const t = document.getElementById('typing'); if(t) t.remove(); }
 
-  function isName(text) {
-    // Simple client-side check — backend does the real validation
-    const lower = text.toLowerCase().trim();
-    const notNamePhrases = ['hi', 'hello', 'hey', 'how', 'what', 'when', 'where', 'do you', '?', 'help'];
-    return !notNamePhrases.some(p => lower.includes(p)) && text.trim().length > 0 && text.trim().length < 30;
-  }
-
-  // ── SEND MESSAGE ──
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text) return;
     inputEl.value = '';
 
-    // Name capture phase
     if (!customerName) {
-      addMessage('user', text);
-      showTyping();
-
+      addMessage('user', text); showTyping();
       try {
-        const res = await fetch(`${BACKEND_URL}/validate-name`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: text })
-        });
-        const data = await res.json();
-        removeTyping();
-
+        const res = await fetch(`${BACKEND_URL}/validate-name`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name:text}), signal: AbortSignal.timeout(60000) });
+        const data = await res.json(); removeTyping();
         if (data.is_name) {
           customerName = data.name;
           sessionId = `${customerName}_${sessionId.substr(-6)}`;
-          inputEl.placeholder = 'Ask Gary anything about Marg\'s Minimart...';
+          inputEl.placeholder = "Ask Gary anything about Marg's Minimart...";
           quickActionsEl.style.display = 'flex';
           addMessage('assistant', `Nice to meet you, <strong>${customerName}</strong>! 😊 How can I help you today? Try one of the quick questions below or ask me anything!`);
         } else {
           addMessage('assistant', "Oops! I just need your name first 😊 Something like <strong>John</strong> or <strong>Priya</strong> works great!");
         }
       } catch(e) {
-        removeTyping();
-        addMessage('assistant', "Nice to meet you, <strong>" + text + "</strong>! 😊 How can I help you today?");
-        customerName = text;
-        inputEl.placeholder = 'Ask Gary anything...';
+        removeTyping(); customerName = text.trim();
+        sessionId = `${customerName}_${sessionId.substr(-6)}`;
+        inputEl.placeholder = "Ask Gary anything...";
         quickActionsEl.style.display = 'flex';
+        addMessage('assistant', `Nice to meet you, <strong>${customerName}</strong>! 😊 How can I help you today?`);
       }
       return;
     }
 
-    // Lead capture phase
     if (awaitingLead && !leadCaptured) {
-      addMessage('user', text);
-      showTyping();
+      addMessage('user', text); showTyping();
       try {
-        const res = await fetch(`${BACKEND_URL}/capture-lead`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session_id: sessionId, name: customerName, contact: text })
-        });
-        const data = await res.json();
-        removeTyping();
-        awaitingLead = false;
-        leadCaptured = true;
+        const res = await fetch(`${BACKEND_URL}/capture-lead`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({session_id:sessionId, name:customerName, contact:text}), signal: AbortSignal.timeout(60000) });
+        const data = await res.json(); removeTyping();
+        awaitingLead = false; leadCaptured = true;
         addMessage('assistant', data.message);
       } catch(e) {
-        removeTyping();
-        awaitingLead = false;
-        leadCaptured = true;
-        addMessage('assistant', `Thank you, <strong>${customerName}</strong>! 🙌 You'll be the first to hear about our deals!`);
+        removeTyping(); awaitingLead = false; leadCaptured = true;
+        addMessage('assistant', `Thank you <strong>${customerName}</strong>! 🙌 You'll be the first to hear about our deals!`);
       }
       return;
     }
 
-    // Normal chat
-    addMessage('user', text);
-    messageCount++;
-    showTyping();
-
+    addMessage('user', text); messageCount++; showTyping();
     try {
       const lang = document.getElementById('langSelect').value;
-      const res = await fetch(`${BACKEND_URL}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: text,
-          session_id: sessionId,
-          customer_name: customerName,
-          language: lang
-        })
-      });
-      const data = await res.json();
-      removeTyping();
+      const res = await fetch(`${BACKEND_URL}/chat`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message:text, session_id:sessionId, customer_name:customerName, language:lang}), signal: AbortSignal.timeout(60000) });
+      const data = await res.json(); removeTyping();
       addMessage('assistant', data.response);
-
-      // Lead capture after 2nd message
       if (messageCount === 2 && !leadCaptured) {
         setTimeout(() => {
           awaitingLead = true;
@@ -980,26 +641,12 @@
       }
     } catch(e) {
       removeTyping();
-      addMessage('assistant', "I'm having a little trouble right now. Please call us directly and we'll be happy to help!");
+      addMessage('assistant', `I'm having a little trouble right now. Please call us at <strong>250-783-5257</strong> and we'll be happy to help!`);
     }
   }
 
-  function sendQuick(text) {
-    inputEl.value = text;
-    sendMessage();
-  }
-
-  function handleKey(e) {
-    if (e.key === 'Enter') sendMessage();
-  }
-
-  // Smooth scroll for CTA
-  document.querySelector('a[href="#chat"]').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => inputEl.focus(), 800);
-  });
+  function sendQuick(text) { inputEl.value = text; sendMessage(); }
+  function handleKey(e) { if(e.key==='Enter') sendMessage(); }
 </script>
-
 </body>
 </html>
